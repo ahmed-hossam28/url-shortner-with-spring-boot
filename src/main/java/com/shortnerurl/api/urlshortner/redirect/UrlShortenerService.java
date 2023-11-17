@@ -23,7 +23,7 @@ public class UrlShortenerService {
             return redirect.getAlias();
         else
             repository.save(redirect);
-        return alias;
+        return redirect.getAlias();
     }
 
     public Optional<UrlRedirect> getOriginalUrl(String alias) {
