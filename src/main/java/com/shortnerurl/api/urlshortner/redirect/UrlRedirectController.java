@@ -23,17 +23,19 @@ public class UrlRedirectController {
         return new ResponseEntity<>(urlShortenerService.shortenUrl(redirect), HttpStatus.CREATED);
     }
      @GetMapping("/{alias}")
-    public ResponseEntity<?> handleRedirect(@PathVariable String alias) throws URISyntaxException {
-       Optional<UrlRedirect> redirect = urlShortenerService.getOriginalUrl(alias);
-        if(redirect.isPresent()){
-            UrlRedirect urlRedirect = redirect.get();
-            URI uri = new URI(urlRedirect.getUrl());
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setLocation(uri);
-            return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> handleRedirect(@PathVariable String alias) {
+       Optional<UrlRedirect> redirect = urlShortenerService.getUrlRedirectByAlias(alias);
+      return redirect.map(urlRedirect->{
+           URI uri = null;
+           try {
+               uri = new URI(urlRedirect.getUrl());
+           } catch (URISyntaxException e) {
+               throw new RuntimeException(e);
+           }
+           HttpHeaders httpHeaders = new HttpHeaders();
+           httpHeaders.setLocation(uri);
+           return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+       }).orElseGet(()->new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 }
