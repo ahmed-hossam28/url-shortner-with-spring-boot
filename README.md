@@ -12,3 +12,8 @@ The URL Shortener Service API, developed with Java and Spring Boot, is designed 
 - URL shortening with user-defined aliases.
 - NoSQL MongoDB for flexible and scalable data storage.
 - Dockerized deployment for easy setup.
+
+**To Run the App:**
+1. Ensure Docker is installed on your system.
+2. Run the MySQL container using Docker.
+3. Build and run the Spring Boot application.
